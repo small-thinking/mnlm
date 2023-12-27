@@ -3,7 +3,7 @@ import os
 import time
 import wave
 
-import pyaudio
+import pyaudio  # type: ignore
 import pygame
 from dotenv import load_dotenv
 from openai import OpenAI

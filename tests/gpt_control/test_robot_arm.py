@@ -11,10 +11,8 @@ import pytest
 from openai.types.chat import ChatCompletion, ChatCompletionMessage
 from openai.types.chat.chat_completion import Choice
 
-from mnlm.client.gpt_control.robot_arm import (
-    OperationSequenceGenerator,
-    SimulatedRobotArmControl,
-)
+from mnlm.client.gpt_control.robot_arm import (OperationSequenceGenerator,
+                                               SimulatedRobotArmControl)
 
 
 # Test for OperationSequenceGenerator
