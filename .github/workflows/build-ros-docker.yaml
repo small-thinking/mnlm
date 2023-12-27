@@ -56,6 +56,8 @@ jobs:
           isort --check --diff .
   
   build:
+    # Only build when after merging
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
