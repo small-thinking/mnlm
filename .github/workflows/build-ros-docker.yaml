@@ -28,6 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           echo "Current directory $PWD"; curl -sSL https://install.python-poetry.org/ | python -
+          pip wheel --no-cache-dir --use-pep517 "pyaudio (==0.2.14)"
           poetry install ; pip install -e .
           python3 -m pip install types-pytz
           python3 -m pip install types-requests
