@@ -10,7 +10,7 @@ python = "^3.11"
 python-dotenv = "^1.0.0"
 openai = "^1.6.1"
 pygame = "^2.5.2"
-pyaudio = "*"
+pyaudio = "^0.2.14"
 tavily-python = "^0.3.0"
 colorama = "^0.4.6"
 
