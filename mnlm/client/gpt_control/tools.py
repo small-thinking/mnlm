@@ -7,9 +7,11 @@ from openai import OpenAI
 from tavily import TavilyClient
 from utils import Logger
 
-from mnlm.client.gpt_control.robot_arm import (OperationSequenceGenerator,
-                                               RobotArmControlClient,
-                                               SimulatedRobotArmControl)
+from mnlm.client.gpt_control.robot_arm import (
+    OperationSequenceGenerator,
+    RobotArmControlClient,
+    SimulatedRobotArmControl,
+)
 
 
 class Tool(ABC):
