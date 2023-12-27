@@ -1,10 +1,64 @@
 name: docker image build
 on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+    paths-ignore:
+      - "docs/**"
+      - "**.md"
   push:
-    branches: [ "**" ]
+    # only build when after merging
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: |
+          sudo apt-get install portaudio19-dev
+          echo "Current directory $PWD"; curl -sSL https://install.python-poetry.org/ | python -
+          poetry install ; pip install -e .
+          python3 -m pip install types-pytz
+          python3 -m pip install types-requests
+      - name: Install pytest
+        run: |
+          pip install pytest
+      - name: Run tests
+        run: |
+          poetry run pytest tests
+      - name: Install lint dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 mypy==1.1.1 isort black
+      - name: Run black
+        run: |
+          black --check .
+      - name: Run Flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Run mypy
+        run: |
+          mypy . --exclude '(mnlm/tests/*|examples/*)'
+      - name: Run isort
+        run: |
+          isort --check --diff .
+  
   build:
+    # Only build when after merging
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3

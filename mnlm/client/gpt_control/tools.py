@@ -4,12 +4,15 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
 from openai import OpenAI
-from tavily import TavilyClient
-from utils import Logger
+from tavily import TavilyClient  # type: ignore
+from utils import Logger  # type: ignore
 
-from mnlm.client.gpt_control.robot_arm import (OperationSequenceGenerator,
-                                               RobotArmControlClient,
-                                               SimulatedRobotArmControl)
+from mnlm.client.gpt_control.robot_arm import (
+    OperationSequenceGenerator,
+    RobotArmControl,
+    RobotArmControlClient,
+    SimulatedRobotArmControl,
+)
 
 
 class Tool(ABC):
@@ -91,10 +94,9 @@ class RobotArmController(Tool):
         self.knowledge = f"""
 
         """
-        if simulation:
-            self.robot_arm_control = SimulatedRobotArmControl()
-        else:
-            self.robot_arm_control = RobotArmControlClient()
+        self.robot_arm_control: RobotArmControl = (
+            SimulatedRobotArmControl() if simulation else RobotArmControlClient()
+        )
 
     def get_signature(self) -> Dict[str, Any]:
         signature = {

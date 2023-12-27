@@ -3,7 +3,7 @@ import logging
 import threading
 from typing import Any
 
-from colorama import Fore, ansi
+from colorama import Fore, ansi  # type: ignore
 
 
 class Logger:

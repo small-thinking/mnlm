@@ -4,11 +4,12 @@ from typing import Any, Dict, List, Optional
 
 from dotenv import load_dotenv
 from openai import OpenAI
-from openai.types.beta import Assistant, Thread
-from openai.types.beta.threads import Run, ThreadMessage
-from tools import *
-from utils import Logger
-from voice import *
+from openai.types.beta import Assistant
+from openai.types.beta.threads import Run
+from openai.types.beta.threads.run_submit_tool_outputs_params import ToolOutput
+from tools import Tool, init_tools, use_tool  # type: ignore
+from utils import Logger  # type: ignore
+from voice import generate_transcription, speak  # type: ignore
 
 
 def create_assistant(
@@ -27,9 +28,7 @@ def create_assistant(
     """
     if not client:
         client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-    tool_signatures: List[Dict[str, Any]] = [
-        tool.get_signature() for tool in tools.values()
-    ]
+    tool_signatures = [tool.get_signature() for tool in tools.values()]
     assistant = client.beta.assistants.create(
         name="Voice Robot Controller",
         instructions="You have a brain and a robot arm, and you receive voice command from the human being, and respond accordingly.",
@@ -79,7 +78,7 @@ def wait_for_run(
     tools: Dict[str, Any],
     logger: Logger,
     verbose: bool = False,
-) -> str:
+) -> str | None:
     """
     Waits for the run to complete.
 
@@ -106,8 +105,10 @@ def wait_for_run(
             )
             response = ""
             for message in messages:
-                response += message.content[0].text.value
-                print(f"{message.role.capitalize()}: {message.content[0].text.value}")
+                response += message.content[0].text.value  # type: ignore
+                print(
+                    f"{message.role.capitalize()}: {message.content[0].text.value}"  # type: ignore
+                )  # type: ignore
                 break
             return response
         elif run.status == "in_progress" or run.status == "queued":
@@ -119,7 +120,9 @@ def wait_for_run(
         elif run.status == "requires_action":
             if verbose:
                 logger.info(f"Run requires action.")
-            required_actions = run.required_action.submit_tool_outputs.model_dump()
+            required_actions = (
+                run.required_action.submit_tool_outputs.model_dump()  # type: ignore
+            )  # noqa: E501
             if verbose:
                 logger.info(required_actions)
             tools_outputs = []
@@ -130,10 +133,10 @@ def wait_for_run(
                 if verbose:
                     logger.info(f"Output from {action['id']} tool: {output}")
                 tools_outputs.append(
-                    {
-                        "tool_call_id": action["id"],
-                        "output": output,
-                    }
+                    ToolOutput(
+                        tool_call_id=action["id"],
+                        output=output,
+                    )
                 )
             # Submit the tool outputs to Assistant API
             if verbose:
@@ -142,10 +145,11 @@ def wait_for_run(
                 thread_id=thread_id,
                 run_id=run_id,
                 tool_outputs=tools_outputs,
-            )
+            )  # type: ignore
         else:
             logger.error(f"Run failed: {run.status}\n\n")
             break
+    return None
 
 
 def cleanup(

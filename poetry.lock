@@ -919,6 +919,42 @@ slack = ["slack-sdk"]
 telegram = ["requests"]
 
 [[package]]
+name = "types-colorama"
+version = "0.4.15.12"
+description = "Typing stubs for colorama"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-colorama-0.4.15.12.tar.gz", hash = "sha256:fbdfc5d9d24d85c33bd054fbe33adc6cec44eedb19cfbbabfbbb57dc257ae4b8"},
+    {file = "types_colorama-0.4.15.12-py3-none-any.whl", hash = "sha256:23c9d4a00961227f7ef018d5a1c190c4bbc282119c3ee76a17677a793f13bb82"},
+]
+
+[[package]]
+name = "types-pyaudio"
+version = "0.2.16.7"
+description = "Typing stubs for pyaudio"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-pyaudio-0.2.16.7.tar.gz", hash = "sha256:27df8a3bac1cf49e690a56fe5f7b5f75a538275bb0374cdda9224a93c8bc7220"},
+    {file = "types_pyaudio-0.2.16.7-py3-none-any.whl", hash = "sha256:b796844a6fa59585359a0ebfec44cf0a13f1909b0bd0c604b288c31bca0901eb"},
+]
+
+[[package]]
+name = "types-requests"
+version = "2.31.0.10"
+description = "Typing stubs for requests"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "types-requests-2.31.0.10.tar.gz", hash = "sha256:dc5852a76f1eaf60eafa81a2e50aefa3d1f015c34cf0cba130930866b1b22a92"},
+    {file = "types_requests-2.31.0.10-py3-none-any.whl", hash = "sha256:b32b9a86beffa876c0c3ac99a4cd3b8b51e973fb8e3bd4e0a6bb32c7efad80fc"},
+]
+
+[package.dependencies]
+urllib3 = ">=2"
+
+[[package]]
 name = "typing-extensions"
 version = "4.9.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -948,4 +984,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "cb983519ecd7fa34eb1fbf5a9198824d67d812adfe85c82d67eac18d880b72d7"
+content-hash = "8edb8a8f5b6ecc2cee84f9f8d1b60f7d10ae44eb9d126998f4cdf8c957134e5b"

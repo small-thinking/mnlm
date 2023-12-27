@@ -28,7 +28,7 @@ class OperationSequenceGenerator:
         self.api_document = ""
         if os.path.exists(os.path.expanduser(api_document_path)):
             with open(os.path.expanduser(api_document_path), "r") as f:
-                self.api_document = f.readlines()
+                self.api_document = "".join(f.readlines())
             if self.verbose:
                 self.logger.info(
                     f"Loaded the API doc for robot arm. Size: {len(self.api_document)}"
@@ -125,7 +125,8 @@ class OperationSequenceGenerator:
             max_tokens=self.max_tokens,
             temperature=0.8,
         )
-        operation_sequence_json_list = response.choices[0].message.content.strip()
+        content = response.choices[0].message.content
+        operation_sequence_json_list = "[]" if not content else content.strip()
         if self.verbose:
             self.logger.info(
                 f"Generated robot arm operations: {operation_sequence_json_list}"
@@ -181,7 +182,7 @@ class SimulatedRobotArmControl(RobotArmControl):
     Simulated control for a robotic arm, printing the operations instead of executing them.
     """
 
-    def _execute_operations(self, operations: List[Dict]):
+    def _execute_operations(self, operations: List[Dict]) -> None:
         for operation in operations:
             self.simulate_operation(operation)
 
@@ -199,6 +200,7 @@ class SimulatedRobotArmControl(RobotArmControl):
             + f"Executing {operation_name} with parameters: {operation_params}"
             + Fore.RESET
         )
+        return ""
 
 
 class RobotArmControlClient(RobotArmControl):

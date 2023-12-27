@@ -11,18 +11,22 @@ import pytest
 from openai.types.chat import ChatCompletion, ChatCompletionMessage
 from openai.types.chat.chat_completion import Choice
 
-from mnlm.client.gpt_control.robot_arm import (OperationSequenceGenerator,
-                                               SimulatedRobotArmControl)
+from mnlm.client.gpt_control.robot_arm import (
+    OperationSequenceGenerator,
+    SimulatedRobotArmControl,
+)
 
 
 # Test for OperationSequenceGenerator
 def test_generate_operation():
-    generator = OperationSequenceGenerator(api_document_path="dummy_path.md")
-    operation_json = generator.generate_operation("set_rgb_light", R=255, G=0, B=0)
-    assert json.loads(operation_json) == {
-        "operation": "set_rgb_light",
-        "parameters": {"R": 255, "G": 0, "B": 0},
-    }
+    # Fake gpt_client in OperationSequenceGenerator.
+    with patch.dict(os.environ, {"OPENAI_API_KEY": "your_mocked_api_key"}):
+        generator = OperationSequenceGenerator(api_document_path="dummy_path.md")
+        operation_json = generator.generate_operation("set_rgb_light", R=255, G=0, B=0)
+        assert json.loads(operation_json) == {
+            "operation": "set_rgb_light",
+            "parameters": {"R": 255, "G": 0, "B": 0},
+        }
 
 
 @pytest.mark.parametrize(

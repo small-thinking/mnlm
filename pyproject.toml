@@ -13,6 +13,9 @@ pygame = "^2.5.2"
 pyaudio = "^0.2.14"
 tavily-python = "^0.3.0"
 colorama = "^0.4.6"
+types-pyaudio = "^0.2.16.7"
+types-requests = "^2.31.0.10"
+types-colorama = "^0.4.15.12"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -24,3 +27,6 @@ mypy = "^1.8.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
