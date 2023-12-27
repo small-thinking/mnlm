@@ -27,6 +27,7 @@ jobs:
           python-version: 3.11
       - name: Install dependencies
         run: |
+          apt-get install portaudio19-dev
           echo "Current directory $PWD"; curl -sSL https://install.python-poetry.org/ | python -
           pip wheel --no-cache-dir --use-pep517 "pyaudio (==0.2.14)"
           poetry install ; pip install -e .
