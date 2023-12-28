@@ -13,6 +13,10 @@ echo "Setting up bashrc..."
 cp ./mnlm/resources/.bashrc .bashrc
 cat ./.bashrc >> ~/.bashrc
 
+# Install bash-completion
+apt-get install -y bash-completion -y
+source /etc/profile.d/bash_completion.sh >> ~/.bashrc
+
 # Install pathogen
 pushd /home/small-thinking
 
