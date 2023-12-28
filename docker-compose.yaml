@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  ros_dev_env:
+    build: .
+    volumes:
+      - ./:/home/small-thinking/mnlm
+    environment:
+      - DISPLAY=novnc:0.0
+      - ROS_DOMAIN_ID=55
+      - --privileged=true
+    networks:
+      - x11
+    stdin_open: true
+    tty: true
+  novnc:
+    image: theasp/novnc:latest
+    environment:
+      - DISPLAY_WIDTH=2560
+      - DISPLAY_HEIGHT=1440
+    ports:
+      - "8080:8080"
+    networks:
+      - x11
+    restart: on-failure
+networks:
+  x11: 
