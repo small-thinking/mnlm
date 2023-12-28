@@ -12,6 +12,7 @@ docker build -t mnlm .
 ## Development
 You can run the docker on the background and login to the docker container to do the development.
 
+0. Install the [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension in VSCode.
 1. Start the docker container:
 ```bash
 docker-compose up -d
