@@ -134,7 +134,7 @@ scripts
 temp/*
 autogen_config.json
 
-# ROS2
-**/install/**
-**/log/**
-**/build/**
+# ROS local files
+**/install/
+**/build/
+**/log/

@@ -19,16 +19,30 @@ RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o 
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] \
     http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" \
     | tee /etc/apt/sources.list.d/ros2.list > /dev/null
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt update \
-    && apt upgrade && apt install -y ros-humble-desktop ros-humble-ros-base ros-dev-tools 
 
-RUN apt-get install -y python3-colcon-mixin \
-    python3-pip python3-rosdep python3-vcstool vim
+# Install ROS2 development tools
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt update \
+    && apt upgrade \
+    && apt install -y \
+    ros-humble-desktop ros-humble-ros-base ros-dev-tools \
+    python3-colcon-mixin python3-pip python3-rosdep python3-vcstool vim tree
 
 # Add locale
 RUN locale-gen en_US en_US.UTF-8 \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
     && export LANG=en_US.UTF-8
+
+# Install Gazebo, see https://gazebosim.org/docs/harmonic/install_ubuntu.
+RUN apt-get update && apt-get install -y lsb-release wget gnupg qtcreator qtbase5-dev qt5-qmake cmake \
+    && wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] \
+    http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" \
+    | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null \
+    && apt-get update && apt-get install -y gz-harmonic
+
+
+# Install MoveIt2, see https://moveit.ros.org/install-moveit2/source/.
+RUN apt-get install -y ros-humble-moveit
 
 # Setup the workspace
 WORKDIR /home/small-thinking/
