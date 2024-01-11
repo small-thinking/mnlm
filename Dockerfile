@@ -22,24 +22,14 @@ RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/r
 
 # Install ROS2 development tools
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt update \
-    && apt upgrade \
-    && apt install -y \
-    ros-humble-desktop ros-humble-ros-base ros-dev-tools \
-    python3-colcon-mixin python3-pip python3-rosdep python3-vcstool vim tree
-
+    && apt-get upgrade -y \
+    && apt-get install -y python3-colcon-mixin python3-pip python3-rosdep python3-vcstool vim tree \
+        ros-humble-desktop-full ros-humble-desktop ros-humble-ros-base ros-dev-tools
+    
 # Add locale
 RUN locale-gen en_US en_US.UTF-8 \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
     && export LANG=en_US.UTF-8
-
-# Install Gazebo, see https://gazebosim.org/docs/harmonic/install_ubuntu.
-RUN apt-get update && apt-get install -y lsb-release wget gnupg qtcreator qtbase5-dev qt5-qmake cmake \
-    && wget https://packages.osrfoundation.org/gazebo.gpg -O /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] \
-    http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" \
-    | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null \
-    && apt-get update && apt-get install -y gz-harmonic
-
 
 # Install MoveIt2, see https://moveit.ros.org/install-moveit2/source/.
 RUN apt-get install -y ros-humble-moveit
@@ -59,10 +49,10 @@ ENV ROS_DISTRO=humble \
 WORKDIR /home/small-thinking/mnlm/
 RUN rosdep init && rosdep update --rosdistro $ROS_DISTRO
 
-# Setup colcon mixin and metadata
-RUN colcon mixin add default \
-      https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
-    colcon mixin update && \
-    colcon metadata add default \
-      https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
-    colcon metadata update
+# # Setup colcon mixin and metadata
+# RUN colcon mixin add default \
+#       https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
+#     colcon mixin update && \
+#     colcon metadata add default \
+#       https://raw.githubusercontent.com/colcon/colcon-metadata-repository/master/index.yaml && \
+#     colcon metadata update
