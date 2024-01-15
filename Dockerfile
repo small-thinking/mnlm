@@ -13,41 +13,44 @@ RUN apt-get update && apt-get install -y \
     python3.11-distutils python3.11-gdbm \
     python3.11-tk python3.11-lib2to3
 
-# Add ROS2 GPG key
-RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-# Add ROS2 apt repository
-RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] \
-    http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" \
-    | tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
-# Install ROS2 development tools
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* && apt update \
+# Add ROS2 GPG key
+RUN curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg \
+    # Add ROS2 apt repository
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] \
+    http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" \
+    | tee /etc/apt/sources.list.d/ros2.list > /dev/null \
+    # Install ROS2 development tools
+    && apt-get clean && rm -rf /var/lib/apt/lists/* && apt update \
     && apt-get upgrade -y \
     && apt-get install -y python3-colcon-mixin python3-pip python3-rosdep python3-vcstool vim tree \
-        ros-humble-desktop-full ros-humble-desktop ros-humble-ros-base ros-dev-tools
-    
-# Add locale
-RUN locale-gen en_US en_US.UTF-8 \
+        ros-humble-desktop-full ros-humble-desktop ros-humble-ros-base ros-dev-tools \
+    # Add locale
+    && locale-gen en_US en_US.UTF-8 \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 \
-    && export LANG=en_US.UTF-8
-
-# Install MoveIt2, see https://moveit.ros.org/install-moveit2/source/.
-RUN apt-get install -y ros-humble-moveit
+    && export LANG=en_US.UTF-8 \
+    # Install MoveIt2, see https://moveit.ros.org/install-moveit2/source/
+    && apt-get install -y ros-humble-moveit
 
 # Setup the workspace
 WORKDIR /home/small-thinking/
 COPY . /home/small-thinking/mnlm/
 
-# Setup environment
-RUN chmod -R 755 ./mnlm/resources && ./mnlm/resources/setup_env.sh \
-    && sed -i 's|root:/root|root:/home/small-thinking|' /etc/passwd
-
 # Bootstrap rosdep
 ENV ROS_DISTRO=humble \
-    HOME=/home/small-thinking
+    HOME=/home/small-thinking \
+    XDG_RUNTIME_DIR=/tmp/runtime-root
 
 WORKDIR /home/small-thinking/mnlm/
-RUN rosdep init && rosdep update --rosdistro $ROS_DISTRO
+
+# Setup environment
+RUN chmod -R 755 ./resources && ./resources/setup_env.sh \
+    && sed -i 's|root:/root|root:/home/small-thinking|' /etc/passwd \
+    && rosdep init && rosdep update --rosdistro $ROS_DISTRO \
+    && echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc \
+    && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+    # Install more packages
+    && apt-get install -y ros-humble-joint-state-publisher-gui ros-humble-nav2-rviz-plugins
 
 # # Setup colcon mixin and metadata
 # RUN colcon mixin add default \
