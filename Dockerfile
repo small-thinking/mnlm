@@ -48,7 +48,7 @@ RUN chmod -R 755 ./resources && ./resources/setup_env.sh \
     && sed -i 's|root:/root|root:/home/small-thinking|' /etc/passwd \
     && rosdep init && rosdep update --rosdistro $ROS_DISTRO \
     && echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc \
-    && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
+    && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc \
     # Install more packages
     && apt-get install -y ros-humble-joint-state-publisher-gui ros-humble-nav2-rviz-plugins
 
