@@ -52,6 +52,7 @@ RUN chmod -R 755 ./resources && ./resources/setup_env.sh \
     # Install more packages
     && apt-get install -y ros-humble-joint-state-publisher-gui ros-humble-nav2-rviz-plugins
 
+
 # # Setup colcon mixin and metadata
 # RUN colcon mixin add default \
 #       https://raw.githubusercontent.com/colcon/colcon-mixin-repository/master/index.yaml && \
