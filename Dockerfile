@@ -43,15 +43,18 @@ ENV ROS_DISTRO=humble \
 
 WORKDIR /home/small-thinking/mnlm/
 
-# Setup environment
+# Setup environment and install control packages
 RUN chmod -R 755 ./resources && ./resources/setup_env.sh \
     && sed -i 's|root:/root|root:/home/small-thinking|' /etc/passwd \
     && rosdep init && rosdep update --rosdistro $ROS_DISTRO \
     && echo "source /usr/share/colcon_cd/function/colcon_cd.sh" >> ~/.bashrc \
     && echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc \
     # Install more packages
-    && apt-get install -y ros-humble-joint-state-publisher-gui ros-humble-nav2-rviz-plugins
-
+    && apt-get update && apt-get install -y ros-humble-joint-state-publisher-gui ros-humble-nav2-rviz-plugins \
+        ros-humble-ros2-control ros-humble-ros2-controllers ros-humble-ign-ros2-control \
+        ros-humble-ros-gz-sim ros-humble-ros-gz-bridge ros-humble-ros-gz-interfaces \
+    # Install python packages
+    && pip install flask
 
 # # Setup colcon mixin and metadata
 # RUN colcon mixin add default \
