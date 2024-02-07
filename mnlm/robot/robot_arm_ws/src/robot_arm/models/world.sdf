@@ -1,157 +1,34 @@
 <?xml version="1.0" ?>
-<sdf version="1.8">
-    <world name="yahboom_arm_world">
-        <scene>
-            <ambient>1 1 1 1</ambient>
-            <background>0.8 0.8 0.8 1</background>
-            <shadows>true</shadows>
-        </scene>
-        <gravity>0 0 -9.8</gravity>
-        <magnetic_field>6e-06 2.3e-05 -4.2e-05</magnetic_field>
-        <atmosphere type='adiabatic'/>
-        <physics type='ode'>
-            <max_step_size>0.001</max_step_size>
-            <real_time_factor>1</real_time_factor>
-            <real_time_update_rate>1000</real_time_update_rate>
-        </physics>
-
-        <light type="directional" name="sun">
-            <cast_shadows>true</cast_shadows>
-            <pose>0 0 10 0 0 0</pose>
-            <diffuse>0.8 0.8 0.8 1</diffuse>
-            <specular>0.2 0.2 0.2 1</specular>
-            <attenuation>
-                <range>1000</range>
-                <constant>0.9</constant>
-                <linear>0.01</linear>
-                <quadratic>0.001</quadratic>
-            </attenuation>
-            <direction>-0.5 0.1 -0.9</direction>
-        </light>
-
-        <model name='ground_plane'>
-            <static>true</static>
-            <link name='link'>
-                <collision name='collision'>
-                    <geometry>
-                        <plane>
-                            <normal>0 0 1</normal>
-                            <size>100 100</size>
-                        </plane>
-                    </geometry>
-                    <surface>
-                        <friction>
-                            <ode/>
-                        </friction>
-                        <bounce/>
-                        <contact/>
-                    </surface>
-                </collision>
-                <visual name='visual'>
-                    <geometry>
-                        <plane>
-                            <normal>0 0 1</normal>
-                            <size>100 100</size>
-                        </plane>
-                    </geometry>
-                    <material>
-                        <ambient>0.8 0.8 0.8 1</ambient>
-                        <diffuse>0.8 0.8 0.8 1</diffuse>
-                        <specular>0.8 0.8 0.8 1</specular>
-                    </material>
-                </visual>
-                <pose>0 0 0 0 -0 0</pose>
-                <inertial>
-                    <pose>0 0 0 0 -0 0</pose>
-                    <mass>1</mass>
-                    <inertia>
-                        <ixx>1</ixx>
-                        <ixy>0</ixy>
-                        <ixz>0</ixz>
-                        <iyy>1</iyy>
-                        <iyz>0</iyz>
-                        <izz>1</izz>
-                    </inertia>
-                </inertial>
-                <enable_wind>false</enable_wind>
-            </link>
-            <pose>0 0 0 0 -0 0</pose>
-            <self_collide>false</self_collide>
-        </model>
-
-        <model name="robot_arm" canonical_link="base">
-            <pose relative_to='world'>0 0 0 0 0 0</pose>
-            <!-- Robot arm base -->
-            <link name='base'>
-                <pose relative_to='__model__'>0.5 0 0.4 0 0 0</pose>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>2.0 1.0 0.5</size>
-                        </box>
-                    </geometry>
-                    <!--let's add color to our link-->
-                    <material>
-                        <ambient>0.0 0.0 1.0 1</ambient>
-                        <diffuse>0.0 0.0 1.0 1</diffuse>
-                        <specular>0.0 0.0 1.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <box>
-                            <size>2.0 1.0 0.5</size>
-                        </box>
-                    </geometry>
-                    <surface>
-                        <friction>
-                            <ode/>
-                        </friction>
-                        <bounce/>
-                        <contact/>
-                    </surface>
-                </collision>
-            </link>
-
-            <!-- Above base -->
-            <link name='lower_body'>
-                <pose relative_to='base'>0.5 0.0 0.5 0 0 0</pose>
-                <visual name='visual'>
-                    <geometry>
-                        <box>
-                            <size>0.5 0.5 0.5</size>
-                        </box>
-                    </geometry>
-                    <material>
-                        <ambient>0.0 1.0 0.0 1</ambient>
-                        <diffuse>0.0 1.0 0.0 1</diffuse>
-                        <specular>0.0 1.0 0.0 1</specular>
-                    </material>
-                </visual>
-                <collision name='collision'>
-                    <geometry>
-                        <cylinder>
-                            <radius>0.5</radius>
-                            <length>1.0</length>
-                        </cylinder>
-                    </geometry>
-                </collision>
-            </link>
-
-            <!-- Joint between base and lower body -->
-            <joint name='base_to_lower_body_joint' type='revolute'>
-                <parent>base</parent>
-                <child>lower_body</child>
-                <axis>
-                    <xyz>0 0 1</xyz>                    <!-- Axis of rotation -->
-                    <limit>
-                        <lower>-1.57</lower>
-                        <upper>1.57</upper>
-                    </limit>
-                </axis>
-                <pose relative_to='base'>0 0.0 0.5 0 0 0</pose>
-            </joint>
-
-        </model>
-    </world>
+<sdf version="1.6">
+  <world name="default">
+    <physics name="default_physics" type="ignition::physics::dartsim::Plugin">
+      <real_time_update_rate>1000</real_time_update_rate>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <light type="directional" name="fake_sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.5 -1</direction>
+    </light>
+    <include>
+      <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Ground Plane</uri>
+    </include>
+    <include>
+      <uri>https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Sun</uri>
+    </include>
+  </world>
 </sdf>
