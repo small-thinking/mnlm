@@ -52,7 +52,7 @@ RUN chmod -R 755 ./resources && ./resources/setup_env.sh \
     # Install more packages
     && apt-get update && apt-get install -y ros-humble-joint-state-publisher-gui ros-humble-nav2-rviz-plugins \
         ros-humble-ros2-control ros-humble-ros2-controllers ros-humble-ign-ros2-control \
-        ros-humble-ros-gz-sim ros-humble-ros-gz-bridge ros-humble-ros-gz-interfaces \
+        ros-humble-ros-gz-sim ros-humble-ros-gz-bridge ros-humble-ros-gz-interfaces ros-humble-moveit \
     # Install python packages
     && pip install flask
 
