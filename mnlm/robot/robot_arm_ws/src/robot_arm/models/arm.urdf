@@ -74,7 +74,7 @@
         <parent link="lower_body"/>
         <child link="upper_body"/>
         <origin xyz="0 0 0.45" rpy="0 0 0"/>
-        <axis xyz="0 1 0"/>
+        <axis xyz="0 0 1"/>
         <limit lower="-1.57" upper="1.57" effort="1000" velocity="1.0"/>
     </joint>
 
