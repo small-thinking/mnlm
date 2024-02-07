@@ -133,6 +133,8 @@ test_scripts
 scripts
 temp/*
 autogen_config.json
+.devcontainer/
+.github/dependabot.yml
 
 # ROS local files
 **/install/
