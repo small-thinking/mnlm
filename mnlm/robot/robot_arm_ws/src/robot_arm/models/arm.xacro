@@ -1,13 +1,16 @@
 <?xml version="1.0"?>
-<robot name="robot_arm">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_arm">
 
-    <!-- <link name="world"></link>
+    <!-- This first link called "world" is empty -->
+    <link name="world"></link>
 
+    <!-- A simple fixed joint from our empty world link, to our base. -->
+    <!-- The base origin is offset from the world origin. -->
     <joint name="base_joint" type="fixed">
         <origin xyz="1.5 1.0 0" rpy="0 0 0"/>
         <parent link="world"/>
         <child link="base"/>
-    </joint> -->
+    </joint>
 
     <link name="base">
         <visual>
@@ -45,7 +48,6 @@
         </collision>
         <inertial>
             <mass value="1.0"/>
-            <!-- Inertia tensor for a cylinder with mass=1kg, radius=0.25, and length=0.5 -->
             <inertia ixx="0.034375" ixy="0" ixz="0" iyy="0.034375" iyz="0" izz="0.0171875"/>
         </inertial>
     </link>
@@ -57,7 +59,6 @@
         <axis xyz="0 0 1"/>
         <limit lower="-1.57" upper="1.57" effort="10000" velocity="1.0"/>
     </joint>
-
     <link name="dummy_lower_body_link">
         <visual>
             <origin xyz="0 0 1.2" rpy="0 0 0"/>
@@ -83,12 +84,12 @@
     <joint name="servo1" type="revolute">
         <parent link="lower_body"/>
         <child link="dummy_lower_body_link"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0.5 0 0" rpy="0 0 0"/>
         <axis xyz="0 -1 0"/>
         <limit lower="0.0" upper="1.57" effort="10000" velocity="1.0"/>
     </joint>
 
-    <!-- <link name="upper_body">
+    <link name="upper_body">
         <visual>
             <geometry>
                 <box size="1.4 0.4 0.4"/>
@@ -113,7 +114,7 @@
         <child link="upper_body"/>
         <origin xyz="-0.2 0 0.4" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
-</joint> -->
+    </joint>
 
     <gazebo>
         <plugin filename="/opt/ros/humble/lib/libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
@@ -131,13 +132,11 @@
             <command_interface name="position"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
-            <!-- <state_interface name="effort"/> -->
         </joint>
         <joint name="servo1">
             <command_interface name="position"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
-            <!-- <state_interface name="effort"/> -->
         </joint>
     </ros2_control>
 
