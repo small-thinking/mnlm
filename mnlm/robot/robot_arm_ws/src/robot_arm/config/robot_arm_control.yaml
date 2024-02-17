@@ -13,6 +13,7 @@ joint_trajectory_controller:
     joints:
       - servo0
       - servo1
+      - servo2
     interface_name: position
     command_interfaces:
       - position

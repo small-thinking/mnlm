@@ -10,7 +10,7 @@ from builtin_interfaces.msg import Duration
 class TrajectoryActionClient(Node):
     def __init__(self):
         super().__init__('trajectory_action_client')
-        joint_names = ["servo0", "servo1"]
+        joint_names = ["servo0", "servo1", "servo2"]
         # joint_names = ["servo1"]
         self.declare_parameter('joint_names', joint_names)  # Default joint names
         self.joint_names = self.get_parameter('joint_names').get_parameter_value().string_array_value
@@ -53,8 +53,9 @@ class TrajectoryActionClient(Node):
 
     def move_robot_arm(self):
         # Example movement: Move to initial position, then to another position
-        if self.send_goal_and_wait(positions=[1.5, 1.5], velocities=[0.5, 0.5], time_from_start_sec=3):
-            self.send_goal_and_wait(positions=[0.0, 0.0], velocities=[0.5, 0.5], time_from_start_sec=3)
+        num_joints = len(self.joint_names)
+        if self.send_goal_and_wait(positions=[1.5] * num_joints, velocities=[0.5] * num_joints, time_from_start_sec=3):
+            self.send_goal_and_wait(positions=[0.0] * num_joints, velocities=[0.5] * num_joints, time_from_start_sec=3)
 
     def _feedback_callback(self, feedback_msg):
         actual_positions = feedback_msg.feedback.actual.positions
