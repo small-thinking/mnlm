@@ -10,7 +10,7 @@ from builtin_interfaces.msg import Duration
 class TrajectoryActionClient(Node):
     def __init__(self):
         super().__init__('trajectory_action_client')
-        joint_names = ["servo0", "servo1", "servo2"]
+        joint_names = ["servo0", "servo1", "servo2", "servo3"]
         # joint_names = ["servo1"]
         self.declare_parameter('joint_names', joint_names)  # Default joint names
         self.joint_names = self.get_parameter('joint_names').get_parameter_value().string_array_value

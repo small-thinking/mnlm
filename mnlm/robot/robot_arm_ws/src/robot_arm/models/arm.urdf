@@ -118,6 +118,37 @@
         <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
     </joint>
 
+    <link name="upper_body">
+        <visual>
+            <origin xyz="0 0 0.4" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.3 0.3 0.8"/>
+            </geometry>
+            <material name="black">
+                <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.4" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.3 0.3 0.8"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.000117" ixy="0" ixz="0" iyy="0.000117" iyz="0" izz="0.0000117"/>
+        </inertial>
+    </link>
+
+    <joint name="servo3" type="revolute">
+        <parent link="upper_middle_body"/>
+        <child link="upper_body"/>
+        <origin xyz="0 0 1.0" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
+    </joint>
+
+
 
 
     <gazebo>
@@ -145,6 +176,12 @@
             <!-- <state_interface name="effort"/> -->
         </joint>
         <joint name="servo2">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+        <joint name="servo3">
             <command_interface name="position"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
