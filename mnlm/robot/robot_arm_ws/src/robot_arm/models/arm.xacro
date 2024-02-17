@@ -1,11 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_arm">
 
-    <!-- This first link called "world" is empty -->
     <link name="world"></link>
 
-    <!-- A simple fixed joint from our empty world link, to our base. -->
-    <!-- The base origin is offset from the world origin. -->
     <joint name="base_joint" type="fixed">
         <origin xyz="1.5 1.0 0" rpy="0 0 0"/>
         <parent link="world"/>
@@ -28,7 +25,7 @@
         </collision>
         <inertial>
             <mass value="1.0"/>
-            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+            <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
         </inertial>
     </link>
 
@@ -48,7 +45,8 @@
         </collision>
         <inertial>
             <mass value="1.0"/>
-            <inertia ixx="0.034375" ixy="0" ixz="0" iyy="0.034375" iyz="0" izz="0.0171875"/>
+            <!-- Inertia tensor for a cylinder with mass=1kg, radius=0.25, and length=0.5 -->
+            <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
         </inertial>
     </link>
 
@@ -57,64 +55,131 @@
         <child link="lower_body"/>
         <origin xyz="0.5 0 0.5" rpy="0 0 0"/>
         <axis xyz="0 0 1"/>
-        <limit lower="-1.57" upper="1.57" effort="10000" velocity="1.0"/>
+        <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
     </joint>
-    <link name="dummy_lower_body_link">
+
+    <link name="middle_body">
         <visual>
-            <origin xyz="0 0 1.2" rpy="0 0 0"/>
+            <origin xyz="0 0 0.5" rpy="0 0 0"/>
             <geometry>
-                <box size="0.4 0.4 1.4"/>
+                <box size="0.3 0.3 1.2"/>
             </geometry>
             <material name="grey">
                 <color rgba="0.5 0.5 0.5 1"/>
             </material>
         </visual>
         <collision>
-            <origin xyz="0 0 1.2" rpy="0 0 0"/>
+            <origin xyz="0 0 0.5" rpy="0 0 0"/>
             <geometry>
-                <box size="0.4 0.4 0.4"/>
+                <box size="0.3 0.3 1.2"/>
             </geometry>
         </collision>
         <inertial>
             <mass value="1.0"/>
-            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+            <inertia ixx="0.000117" ixy="0" ixz="0" iyy="0.000117" iyz="0" izz="0.0000117"/>
         </inertial>
     </link>
 
     <joint name="servo1" type="revolute">
         <parent link="lower_body"/>
-        <child link="dummy_lower_body_link"/>
-        <origin xyz="0.5 0 0" rpy="0 0 0"/>
+        <child link="middle_body"/>
+        <origin xyz="0 0 0.5" rpy="0 0 0"/>
         <axis xyz="0 -1 0"/>
-        <limit lower="0.0" upper="1.57" effort="10000" velocity="1.0"/>
+        <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
+    </joint>
+
+    <link name="upper_middle_body">
+        <visual>
+            <origin xyz="0 0 0.6" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.3 0.3 1.0"/>
+            </geometry>
+            <material name="dark_green">
+                <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.6" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.3 0.3 1.0"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.000117" ixy="0" ixz="0" iyy="0.000117" iyz="0" izz="0.0000117"/>
+        </inertial>
+    </link>
+
+    <joint name="servo2" type="revolute">
+        <parent link="middle_body"/>
+        <child link="upper_middle_body"/>
+        <origin xyz="0 0 0.9" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
     </joint>
 
     <link name="upper_body">
         <visual>
+            <origin xyz="0 0 0.4" rpy="0 0 0"/>
             <geometry>
-                <box size="1.4 0.4 0.4"/>
+                <box size="0.3 0.3 0.8"/>
             </geometry>
-            <material name="dark_green">
-                <color rgba="0.5 0.5 1.0 1"/>
+            <material name="black">
+                <color rgba="0.5 0.5 0.5 1"/>
             </material>
         </visual>
         <collision>
+            <origin xyz="0 0 0.4" rpy="0 0 0"/>
             <geometry>
-                <box size="1.4 0.4 0.4"/>
+                <box size="0.3 0.3 0.8"/>
             </geometry>
         </collision>
         <inertial>
-            <mass value="0.1"/>
-            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+            <mass value="1.0"/>
+            <inertia ixx="0.000117" ixy="0" ixz="0" iyy="0.000117" iyz="0" izz="0.0000117"/>
         </inertial>
     </link>
 
-    <joint name="dummy_lower_body_joint" type="fixed">
-        <parent link="dummy_lower_body_link"/>
+    <joint name="servo3" type="revolute">
+        <parent link="upper_middle_body"/>
         <child link="upper_body"/>
-        <origin xyz="-0.2 0 0.4" rpy="0 0 0"/>
+        <origin xyz="0 0 1.0" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
+        <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
     </joint>
+
+    <link name="gripper_base">
+        <visual>
+            <origin xyz="0 0 0.4" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.5 0.5 0.1"/>
+            </geometry>
+            <material name="dark_green">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.4" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.5 0.5 0.1"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.000117" ixy="0" ixz="0" iyy="0.000117" iyz="0" izz="0.0000117"/>
+        </inertial>
+    </link>
+
+    <joint name="servo4" type="revolute">
+        <parent link="upper_body"/>
+        <child link="gripper_base"/>
+        <origin xyz="0 0 0.45" rpy="0 0 0"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
+    </joint>
+
+
+
 
     <gazebo>
         <plugin filename="/opt/ros/humble/lib/libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
@@ -132,11 +197,31 @@
             <command_interface name="position"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
         </joint>
         <joint name="servo1">
             <command_interface name="position"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+        <joint name="servo2">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+        <joint name="servo3">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+        <joint name="servo4">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
         </joint>
     </ros2_control>
 

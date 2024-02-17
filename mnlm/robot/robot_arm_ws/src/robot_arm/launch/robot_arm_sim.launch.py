@@ -1,9 +1,11 @@
 import os
+import tempfile
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import ExecuteProcess
 from launch_ros.actions import Node
+from launch.substitutions import Command
 
 
 def generate_launch_description():
@@ -22,12 +24,25 @@ def generate_launch_description():
 
     # Include the project folder
     pkg_robot_arm_gazebo = get_package_share_directory("robot_arm")
-    urdf_file_path = os.path.join(pkg_robot_arm_gazebo, "models", "arm.urdf")
     world_file_path = os.path.join(pkg_robot_arm_gazebo, "models", "world.sdf")
+    xacro_file_path = os.path.join(pkg_robot_arm_gazebo, "models", "arm.xacro")
+    
+    # Convert xacro to URDF
+    robot_description_content = Command([
+        "xacro ", xacro_file_path
+    ])
+    
+    # Create a temporary file to store the converted URDF
+    temp_urdf_file = tempfile.NamedTemporaryFile(delete=True, mode='w', suffix='.urdf')
+    urdf_file_path = temp_urdf_file.name
 
-    # Read the URDF file
-    with open(urdf_file_path, "r") as file:
-        robot_description_content = file.read()
+    # Convert XACRO to URDF and write to the temporary file
+    command = f"xacro {xacro_file_path} > {urdf_file_path}"
+    convert_xacro_to_urdf = ExecuteProcess(
+        cmd=[command],
+        shell=True,
+        output='screen',
+    )
 
     # Start Ignition Gazebo with an empty world
     start_gazebo_cmd = ExecuteProcess(
@@ -88,6 +103,7 @@ def generate_launch_description():
     # Start them all
     return LaunchDescription(
         [
+            convert_xacro_to_urdf,
             start_gazebo_cmd,
             spawn_model_cmd,
             robot_state_publisher_node,

@@ -15,6 +15,7 @@ joint_trajectory_controller:
       - servo1
       - servo2
       - servo3
+      - servo4
     interface_name: position
     command_interfaces:
       - position
