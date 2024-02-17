@@ -28,6 +28,8 @@ setup(
         (os.path.join("share", package_name, "config"), glob("config/*")),
         # Include the scripts
         (os.path.join("lib", package_name), glob("scripts/*")),
+        # Include rviz files
+        (os.path.join("share", package_name, "rviz"), glob("rviz/*")),
     ],
     install_requires=["setuptools", "flask"],
     zip_safe=True,
