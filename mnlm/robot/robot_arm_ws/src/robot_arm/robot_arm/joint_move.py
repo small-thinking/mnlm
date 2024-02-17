@@ -11,21 +11,22 @@ class TrajectoryActionClient(Node):
     def __init__(self):
         super().__init__('trajectory_action_client')
         joint_names = ["servo0", "servo1"]
-        joint_names = ["servo1"]
+        # joint_names = ["servo1"]
         self.declare_parameter('joint_names', joint_names)  # Default joint names
         self.joint_names = self.get_parameter('joint_names').get_parameter_value().string_array_value
         
         self.action_client = ActionClient(self, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
 
     def send_goal_and_wait(self, positions, velocities, time_from_start_sec):
+        self.get_logger().info('Sending new goal to the action server...')
         goal_msg = FollowJointTrajectory.Goal()
         trajectory = JointTrajectory()
         
         trajectory.joint_names = self.joint_names
         
         point = JointTrajectoryPoint()
-        point.positions = positions[:1]  # Specify positions for each joint
-        point.velocities = velocities[:1]  # Specify velocities for each joint
+        point.positions = positions  # Specify positions for each joint
+        point.velocities = velocities  # Specify velocities for each joint
         point.time_from_start = Duration(sec=time_from_start_sec, nanosec=0)
         trajectory.points.append(point)
 
@@ -45,13 +46,15 @@ class TrajectoryActionClient(Node):
         rclpy.spin_until_future_complete(self, get_result_future)
         result = get_result_future.result().result
         if result:
-            self.get_logger().info(f'Result: {result.error_string}')
+            self.get_logger().info(f'Result: {result}')
+            
+        self.action_client.wait_for_server()
         return True
 
     def move_robot_arm(self):
         # Example movement: Move to initial position, then to another position
-        if self.send_goal_and_wait(positions=[1.5, 1.5], velocities=[1.0, 1.0], time_from_start_sec=5):
-            self.send_goal_and_wait(positions=[0.0, 0.0], velocities=[1.0, 1.0], time_from_start_sec=10)
+        if self.send_goal_and_wait(positions=[1.5, 1.5], velocities=[0.5, 0.5], time_from_start_sec=3):
+            self.send_goal_and_wait(positions=[0.0, 0.0], velocities=[0.5, 0.5], time_from_start_sec=3)
 
     def _feedback_callback(self, feedback_msg):
         actual_positions = feedback_msg.feedback.actual.positions
@@ -67,7 +70,8 @@ def main(args=None):
         action_client.get_logger().error(f'Encountered an error: {e}')
     finally:
         action_client.destroy_node()
-    rclpy.shutdown()
+        rclpy.shutdown()
+    action_client.get_logger().info('action_client destroyed and node shut down.')
 
 if __name__ == '__main__':
     main()
