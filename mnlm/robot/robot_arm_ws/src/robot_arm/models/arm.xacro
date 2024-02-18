@@ -148,7 +148,7 @@
         <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
     </joint>
 
-    <link name="gripper_base">
+    <link name="top_link">
         <visual>
             <origin xyz="0 0 0.4" rpy="0 0 0"/>
             <geometry>
@@ -172,14 +172,71 @@
 
     <joint name="servo4" type="revolute">
         <parent link="upper_body"/>
-        <child link="gripper_base"/>
+        <child link="top_link"/>
         <origin xyz="0 0 0.45" rpy="0 0 0"/>
         <axis xyz="0 0 1"/>
         <limit lower="-1.57" upper="1.57" effort="1000" velocity="2.0"/>
     </joint>
 
+    <link name="gripper_left_finger">
+        <visual>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.4"/>
+            </geometry>
+            <material name="grey">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.4"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.000117" ixy="0" ixz="0" iyy="0.000117" iyz="0" izz="0.0000117"/>
+        </inertial>
+    </link>
 
+    <joint name="left_gripper_joint" type="prismatic">
+        <parent link="top_link"/>
+        <child link="gripper_left_finger"/>
+        <origin xyz="0 0.2 0.5" rpy="0 0 0"/>
+        <axis xyz="0 -1 0"/>
+        <limit lower="-0.3" upper="0.3" effort="100.0" velocity="1.0"/>
+    </joint>
 
+    <link name="gripper_right_finger">
+        <visual>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.4"/>
+            </geometry>
+            <material name="dark_green">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.1 0.1 0.4"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="1.0"/>
+            <inertia ixx="0.000117" ixy="0" ixz="0" iyy="0.000117" iyz="0" izz="0.0000117"/>
+        </inertial>
+    </link>
+
+    <joint name="right_gripper_joint" type="prismatic">
+        <parent link="top_link"/>
+        <child link="gripper_right_finger"/>
+        <origin xyz="0 -0.2 0.5" rpy="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <limit lower="-0.3" upper="0.3" effort="100.0" velocity="1.0"/>
+    </joint>
 
     <gazebo>
         <plugin filename="/opt/ros/humble/lib/libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
@@ -218,6 +275,19 @@
             <!-- <state_interface name="effort"/> -->
         </joint>
         <joint name="servo4">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+        <joint name="left_gripper_joint">
+            <command_interface name="position"/>
+            <state_interface name="position"/>
+            <state_interface name="velocity"/>
+            <!-- <state_interface name="effort"/> -->
+        </joint>
+
+        <joint name="right_gripper_joint">
             <command_interface name="position"/>
             <state_interface name="position"/>
             <state_interface name="velocity"/>

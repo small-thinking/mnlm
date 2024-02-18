@@ -14,6 +14,9 @@ class TrajectoryActionClient(Node):
         joint_names = []
         for i in range(self.num_joints):
             joint_names.append("servo" + str(i))
+        # Add left and right gripper joints
+        joint_names.append("left_gripper_joint")
+        joint_names.append("right_gripper_joint")
         # joint_names = ["servo1"]
         self.declare_parameter('joint_names', joint_names)  # Default joint names
         self.joint_names = self.get_parameter('joint_names').get_parameter_value().string_array_value
@@ -56,8 +59,19 @@ class TrajectoryActionClient(Node):
 
     def move_robot_arm(self):
         # Example movement: Move to initial position, then to another position
-        if self.send_goal_and_wait(positions=[1.5] * self.num_joints, velocities=[0.5] * self.num_joints, time_from_start_sec=3):
-            self.send_goal_and_wait(positions=[0.0] * self.num_joints, velocities=[0.5] * self.num_joints, time_from_start_sec=3)
+        gripper_positions_left = [0.15, 0.15]
+        gripper_positions_right = [0.0, 0.0]
+        gripper_velocities = [0.05, 0.05]
+        if self.send_goal_and_wait(
+            positions=[1.5] * self.num_joints + gripper_positions_left,
+            velocities=[0.5] * self.num_joints + gripper_velocities,
+            time_from_start_sec=3
+        ):
+            self.send_goal_and_wait(
+                positions=[0.0] * self.num_joints + gripper_positions_right,
+                velocities=[0.5] * self.num_joints + gripper_velocities,
+                time_from_start_sec=3
+            )
 
     def _feedback_callback(self, feedback_msg):
         actual_positions = feedback_msg.feedback.actual.positions

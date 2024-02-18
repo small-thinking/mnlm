@@ -1,6 +1,18 @@
-<!--https://github.com/PacktPublishing/ROS-Robotics-By-Example/blob/master/Chapter_5_code/ros_robotics/urdf/gripper.xacro-->
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+<!--https://github.com/PacktPublishing/ROS-Robotics-By-Example/blob/master/Chapter_5_code/ros_robotics/urdf/gripper.xacro-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="gripper">
+
+    <xacro:property name="height2" value="1" />
+    <xacro:property name="axle_offset" value="0.05" />
+
+    <!-- Default Inertial -->
+    <xacro:macro name="default_inertial" params="z_value i_value mass">
+        <inertial>
+            <origin xyz="0 0 ${z_value}" rpy="0 0 0"/>
+            <mass value="${mass}" />
+            <inertia ixx="${i_value}" ixy="0.0" ixz="0.0" iyy="${i_value}" iyz="0.0" izz="${i_value}" />
+        </inertial>
+    </xacro:macro>
 
     <!-- Gripper -->
     <joint name="left_gripper_joint" type="revolute">
@@ -15,7 +27,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0"/>
             <geometry>
-                <mesh filename="package://ros_robotics/meshes/l_finger.dae"/>
+                <mesh filename="$(find robot_arm)/meshes/l_finger.dae"/>
             </geometry>
         </visual>
 
@@ -36,7 +48,7 @@
         <visual>
             <origin rpy="0 0 0" xyz="0.09137 0.00495 0"/>
             <geometry>
-                <mesh filename="package://ros_robotics/meshes/l_finger_tip.dae"/>
+                <mesh filename="$(find robot_arm)/meshes/l_finger_tip.dae"/>
             </geometry>
         </visual>
 
@@ -60,7 +72,7 @@
         <visual>
             <origin rpy="3.1415 0 0" xyz="0 0 0"/>
             <geometry>
-                <mesh filename="package://ros_robotics/meshes/l_finger.dae"/>
+                <mesh filename="$(find robot_arm)/meshes/l_finger.dae"/>
             </geometry>
         </visual>
 
@@ -81,7 +93,7 @@
         <visual>
             <origin rpy="-3.1415 0 0" xyz="0.09137 0.00495 0"/>
             <geometry>
-                <mesh filename="package://ros_robotics/meshes/l_finger_tip.dae"/>
+                <mesh filename="$(find robot_arm)/meshes/l_finger_tip.dae"/>
             </geometry>
         </visual>
 
@@ -92,27 +104,5 @@
         </collision>
         <xacro:default_inertial z_value="0" i_value="1e-6" mass="1e-5"/>
     </link>
-
-    <transmission name="gripper_transmission1">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="left_gripper_joint">
-            <hardwareInterface>EffortJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="gripper_motor1">
-            <hardwareInterface>EffortJointInterface</hardwareInterface>
-            <mechanicalReduction>1</mechanicalReduction>
-        </actuator>
-    </transmission>
-
-    <transmission name="gripper_transmission2">
-        <type>transmission_interface/SimpleTransmission</type>
-        <joint name="right_gripper_joint">
-            <hardwareInterface>EffortJointInterface</hardwareInterface>
-        </joint>
-        <actuator name="gripper_motor2">
-            <hardwareInterface>EffortJointInterface</hardwareInterface>
-            <mechanicalReduction>1</mechanicalReduction>
-        </actuator>
-    </transmission>
 
 </robot>

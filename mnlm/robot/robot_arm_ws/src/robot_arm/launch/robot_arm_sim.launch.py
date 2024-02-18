@@ -33,7 +33,9 @@ def generate_launch_description():
     ])
     
     # Create a temporary file to store the converted URDF
-    temp_urdf_file = tempfile.NamedTemporaryFile(delete=True, mode='w', suffix='.urdf')
+    temp_urdf_file = tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.urdf')
+    if os.path.exists(temp_urdf_file.name):
+        os.remove(temp_urdf_file.name)
     urdf_file_path = temp_urdf_file.name
 
     # Convert XACRO to URDF and write to the temporary file
