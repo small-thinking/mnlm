@@ -12,7 +12,7 @@ class CommandDispatcherNode(Node):
             String, "json_command_topic", self._json_command_callback, 10
         )
         # Setup publish to servos
-        self.servo0_pub = self.create_publisher(Float64, '/servo0/control', 10)
+        self.servo0_pub = self.create_publisher(Float64, "/servo0/control", 10)
 
     def _json_command_callback(self, msg):
         """
@@ -39,13 +39,13 @@ class CommandDispatcherNode(Node):
             self.get_logger().warn(f"Unknown action: {action}")
 
     def _move_joint(self, joint_name, value):
-        if joint_name == 'servo0':
+        if joint_name == "servo0":
             control_msg = Float64()
             control_msg.data = value
             self.servo0_pub.publish(control_msg)
-            self.get_logger().info(f'{self.node_name} Moving {joint_name} to {value}')
+            self.get_logger().info(f"{self.node_name} Moving {joint_name} to {value}")
         else:
-            self.get_logger().warn(f'{self.node_name} Unknown joint: {joint_name}')
+            self.get_logger().warn(f"{self.node_name} Unknown joint: {joint_name}")
 
 
 def main(args=None):

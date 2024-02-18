@@ -7,23 +7,36 @@ from control_msgs.action import FollowJointTrajectory
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from builtin_interfaces.msg import Duration
 
+
 class TrajectoryActionClient(Node):
     def __init__(self):
-        super().__init__('trajectory_action_client')
-        joint_names = ["servo0", "servo1"]
+        super().__init__("trajectory_action_client")
+        self.num_joints = 5
+        joint_names = []
+        for i in range(self.num_joints):
+            joint_names.append("servo" + str(i))
+        # Add left and right gripper joints
+        joint_names.append("left_gripper_joint")
+        joint_names.append("right_gripper_joint")
         # joint_names = ["servo1"]
-        self.declare_parameter('joint_names', joint_names)  # Default joint names
-        self.joint_names = self.get_parameter('joint_names').get_parameter_value().string_array_value
-        
-        self.action_client = ActionClient(self, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
+        self.declare_parameter("joint_names", joint_names)  # Default joint names
+        self.joint_names = (
+            self.get_parameter("joint_names").get_parameter_value().string_array_value
+        )
+
+        self.action_client = ActionClient(
+            self,
+            FollowJointTrajectory,
+            "/joint_trajectory_controller/follow_joint_trajectory",
+        )
 
     def send_goal_and_wait(self, positions, velocities, time_from_start_sec):
-        self.get_logger().info('Sending new goal to the action server...')
+        self.get_logger().info("Sending new goal to the action server...")
         goal_msg = FollowJointTrajectory.Goal()
         trajectory = JointTrajectory()
-        
+
         trajectory.joint_names = self.joint_names
-        
+
         point = JointTrajectoryPoint()
         point.positions = positions  # Specify positions for each joint
         point.velocities = velocities  # Specify velocities for each joint
@@ -33,33 +46,49 @@ class TrajectoryActionClient(Node):
         goal_msg.trajectory = trajectory
 
         self.action_client.wait_for_server()
-        send_goal_future = self.action_client.send_goal_async(goal_msg, feedback_callback=self._feedback_callback)
+        send_goal_future = self.action_client.send_goal_async(
+            goal_msg, feedback_callback=self._feedback_callback
+        )
         rclpy.spin_until_future_complete(self, send_goal_future)
 
         goal_handle = send_goal_future.result()
         if not goal_handle.accepted:
-            self.get_logger().info('Goal rejected :(')
+            self.get_logger().info("Goal rejected :(")
             return False
 
-        self.get_logger().info('Goal accepted :)')
+        self.get_logger().info("Goal accepted :)")
         get_result_future = goal_handle.get_result_async()
         rclpy.spin_until_future_complete(self, get_result_future)
         result = get_result_future.result().result
         if result:
-            self.get_logger().info(f'Result: {result}')
-            
+            self.get_logger().info(f"Result: {result}")
+
         self.action_client.wait_for_server()
         return True
 
     def move_robot_arm(self):
         # Example movement: Move to initial position, then to another position
-        if self.send_goal_and_wait(positions=[1.5, 1.5], velocities=[0.5, 0.5], time_from_start_sec=3):
-            self.send_goal_and_wait(positions=[0.0, 0.0], velocities=[0.5, 0.5], time_from_start_sec=3)
+        gripper_positions_left = [0.15, 0.15]
+        gripper_positions_right = [0.0, 0.0]
+        gripper_velocities = [0.05, 0.05]
+        if self.send_goal_and_wait(
+            positions=[1.5] * self.num_joints + gripper_positions_left,
+            velocities=[0.5] * self.num_joints + gripper_velocities,
+            time_from_start_sec=3,
+        ):
+            self.send_goal_and_wait(
+                positions=[0.0] * self.num_joints + gripper_positions_right,
+                velocities=[0.5] * self.num_joints + gripper_velocities,
+                time_from_start_sec=3,
+            )
 
     def _feedback_callback(self, feedback_msg):
         actual_positions = feedback_msg.feedback.actual.positions
         actual_velocities = feedback_msg.feedback.actual.velocities
-        self.get_logger().info(f'Received feedback: positions: {actual_positions}, velocities: {actual_velocities}')
+        self.get_logger().info(
+            f"Received feedback: positions: {actual_positions}, velocities: {actual_velocities}"
+        )
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -67,11 +96,12 @@ def main(args=None):
     try:
         action_client.move_robot_arm()
     except Exception as e:
-        action_client.get_logger().error(f'Encountered an error: {e}')
+        action_client.get_logger().error(f"Encountered an error: {e}")
     finally:
         action_client.destroy_node()
         rclpy.shutdown()
-    action_client.get_logger().info('action_client destroyed and node shut down.')
+    action_client.get_logger().info("action_client destroyed and node shut down.")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

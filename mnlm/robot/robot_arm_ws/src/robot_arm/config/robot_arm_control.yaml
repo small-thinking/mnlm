@@ -13,6 +13,11 @@ joint_trajectory_controller:
     joints:
       - servo0
       - servo1
+      - servo2
+      - servo3
+      - servo4
+      - left_gripper_joint
+      - right_gripper_joint
     interface_name: position
     command_interfaces:
       - position
