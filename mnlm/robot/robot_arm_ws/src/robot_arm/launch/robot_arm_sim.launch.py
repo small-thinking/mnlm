@@ -26,14 +26,12 @@ def generate_launch_description():
     pkg_robot_arm_gazebo = get_package_share_directory("robot_arm")
     world_file_path = os.path.join(pkg_robot_arm_gazebo, "models", "world.sdf")
     xacro_file_path = os.path.join(pkg_robot_arm_gazebo, "models", "arm.xacro")
-    
+
     # Convert xacro to URDF
-    robot_description_content = Command([
-        "xacro ", xacro_file_path
-    ])
-    
+    robot_description_content = Command(["xacro ", xacro_file_path])
+
     # Create a temporary file to store the converted URDF
-    temp_urdf_file = tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.urdf')
+    temp_urdf_file = tempfile.NamedTemporaryFile(delete=False, mode="w", suffix=".urdf")
     if os.path.exists(temp_urdf_file.name):
         os.remove(temp_urdf_file.name)
     urdf_file_path = temp_urdf_file.name
@@ -43,7 +41,7 @@ def generate_launch_description():
     convert_xacro_to_urdf = ExecuteProcess(
         cmd=[command],
         shell=True,
-        output='screen',
+        output="screen",
     )
 
     # Start Ignition Gazebo with an empty world
