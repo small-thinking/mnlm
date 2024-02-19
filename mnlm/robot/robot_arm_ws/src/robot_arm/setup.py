@@ -41,7 +41,8 @@ setup(
         "console_scripts": [
             "command_receiver_node = robot_arm.command_receiver:main",
             "command_dispatcher_node = robot_arm.command_dispatcher:main",
-            "joint_move_node = robot_arm.joint_move:main",
+            "joint_mover_node = robot_arm.joint_mover:main",
+            "joint_move_script_node = robot_arm.joint_move_script:main",
         ],
     },
 )

@@ -78,12 +78,12 @@ class OperationSequenceGenerator:
             Please convert the following oral comamnd to machine readable operation json (list of json blobs)
             according to the API document.
 
-            The expected output would be:
+            An example output would be:
             {{
                 operations: [
                     {{
                         "operation": "move_single_servo",
-                        "parameters": {{"id": 1, "angle": 60, "time": 500}}
+                        "parameters": {{"id": "servo0", "angle": 60, "time": 500}}
                     }},
                     {{
                         "operation": "set_rgb_light",
@@ -91,10 +91,12 @@ class OperationSequenceGenerator:
                     }},
                     {{
                         "operation": "move_single_servo",
-                        "parameters": {{"id": 1, "angle": 90, "time": 500}}
+                        "parameters": {{"id": "servo1", "angle": 90, "time": 500}}
                     }}
                 ]
             }}
+            
+            The list of operations can be 1 ore many.
 
             Command:        
             ---
