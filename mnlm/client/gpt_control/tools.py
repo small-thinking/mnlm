@@ -83,7 +83,10 @@ class RobotArmController(Tool):
         verbose: bool = False,
     ):
         super().__init__(name=name, logger=logger, verbose=verbose)
-        api_document_path = "~/source/ml-prototype/data/knowledge/robot_arm.md"
+        # The api doc is under client/knowledge/robot_arm.md
+        api_document_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "knowledge", "robot_arm.md"
+        )
         self.operation_generator = OperationSequenceGenerator(
             api_document_path=api_document_path,
             gpt_client=gpt_client,
