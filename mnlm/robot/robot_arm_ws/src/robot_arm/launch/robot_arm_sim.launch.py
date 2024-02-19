@@ -10,11 +10,11 @@ from launch.substitutions import Command
 
 def generate_launch_description():
     # The node to receive the http request externally for robot control.
-    # command_receiver_node = Node(
-    #     package="robot_arm",
-    #     executable="command_receiver_node",
-    #     name="command_receiver_node",
-    # )
+    command_receiver_node = Node(
+        package="robot_arm",
+        executable="command_receiver_node",
+        name="command_receiver_node",
+    )
     # # WIP. The node to dispatch the received command to topics.
     # command_dispatcher_node = Node(
     #     package="robot_arm",
@@ -109,6 +109,6 @@ def generate_launch_description():
             robot_state_publisher_node,
             joint_state_broadcaster_node,
             robot_controller_spawner_node,
-            # command_receiver_node,
+            command_receiver_node,
         ]
     )

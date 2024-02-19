@@ -232,7 +232,7 @@ if __name__ == "__main__":
     nudge_user = True
     use_voice_input = True  # Set to True to enable voice input. In docker container, it's not possible.
     use_voice_output = True  # Set to True to enable voice output. In docker container, it's not possible.
-    use_dummy_robot_arm_server = True  # Set to True to use the simulation mode
+    use_dummy_robot_arm_server = False  # Set to True to use the simulation mode
     logger = Logger(__name__)
     start_conversation(
         verbose=verbose,

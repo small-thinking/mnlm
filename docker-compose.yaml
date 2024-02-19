@@ -8,6 +8,8 @@ services:
       - DISPLAY=novnc:0.0
       - ROS_DOMAIN_ID=55
       - --privileged=true
+    ports:
+      - "5678:5678"
     networks:
       - x11
     stdin_open: true

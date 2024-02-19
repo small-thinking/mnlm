@@ -209,7 +209,7 @@ class RobotArmControlClient(RobotArmControl):
     Real control for a robotic arm, sending operations as HTTP requests.
     """
 
-    def __init__(self, endpoint_url: str = "http://192.168.0.238:5000/execute"):
+    def __init__(self, endpoint_url: str = "http://0.0.0.0:5678/robot_command"):
         self.endpoint_url = endpoint_url
 
     def _execute_operations(self, operations: List[Dict[str, Any]]) -> None:
