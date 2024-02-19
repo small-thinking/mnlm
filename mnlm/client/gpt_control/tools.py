@@ -4,15 +4,14 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
 from openai import OpenAI
-from tavily import TavilyClient  # type: ignore
-from utils import Logger  # type: ignore
-
-from mnlm.client.gpt_control.robot_arm import (
+from robot_arm import (
     OperationSequenceGenerator,
     RobotArmControl,
     RobotArmControlClient,
     SimulatedRobotArmControl,
 )
+from tavily import TavilyClient  # type: ignore
+from utils import Logger  # type: ignore
 
 
 class Tool(ABC):
@@ -135,7 +134,16 @@ class RobotArmController(Tool):
             return f"Error: {e}"
 
 
-def init_tools(logger: Logger, verbose: bool = False):
+def init_tools(
+    logger: Logger, verbose: bool = False, use_dummy_robot_arm_server: bool = False
+) -> Dict[str, Any]:
+    """Initialize the tools for the assistant.
+
+    Args:
+        logger (Logger): The logger.
+        verbose (bool): If True, prints verbose output.
+        use_dummy_robot_arm_server (bool): If True, use the simulation mode.
+    """
     tools = {
         # "search_engine": SearchEngine(
         #     name="search_engine", logger=logger, verbose=verbose
@@ -144,7 +152,7 @@ def init_tools(logger: Logger, verbose: bool = False):
             name="robot_arm",
             logger=logger,
             verbose=verbose,
-            simulation=False,
+            simulation=use_dummy_robot_arm_server,
         ),
     }
     return tools

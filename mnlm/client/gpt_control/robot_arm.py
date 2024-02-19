@@ -7,8 +7,7 @@ import requests
 from colorama import Fore
 from dotenv import load_dotenv
 from openai import OpenAI
-
-from mnlm.client.utils import Logger
+from utils import Logger
 
 
 class OperationSequenceGenerator:
@@ -76,36 +75,36 @@ class OperationSequenceGenerator:
         """
         # Construct the natural language to operation sequence prompt
         instruction = f"""
-        Please convert the following oral comamnd to machine readable operation json (list of json blobs)
-        according to the API document.
+            Please convert the following oral comamnd to machine readable operation json (list of json blobs)
+            according to the API document.
 
-        The expected output would be:
-        {{
-            operations: [
-                {{
-                    "operation": "move_single_servo",
-                    "parameters": {{"id": 1, "angle": 60, "time": 500}}
-                }},
-                {{
-                    "operation": "set_rgb_light",
-                    "parameters": {{"R": 255, "G": 0, "B": 0}}
-                }},
-                {{
-                    "operation": "move_single_servo",
-                    "parameters": {{"id": 1, "angle": 90, "time": 500}}
-                }}
-            ]
-        }}
+            The expected output would be:
+            {{
+                operations: [
+                    {{
+                        "operation": "move_single_servo",
+                        "parameters": {{"id": 1, "angle": 60, "time": 500}}
+                    }},
+                    {{
+                        "operation": "set_rgb_light",
+                        "parameters": {{"R": 255, "G": 0, "B": 0}}
+                    }},
+                    {{
+                        "operation": "move_single_servo",
+                        "parameters": {{"id": 1, "angle": 90, "time": 500}}
+                    }}
+                ]
+            }}
 
-        Command:        
-        ---
-        {prompt}
-        ---
+            Command:        
+            ---
+            {prompt}
+            ---
 
-        API Document:
-        ---
-        {self.api_document}
-        ---
+            API Document:
+            ---
+            {self.api_document}
+            ---
         """
         if self.verbose:
             self.logger.info(f"Instruction: {instruction}")
@@ -155,10 +154,12 @@ class RobotArmControl(ABC):
         """
         # Validate the operations JSON blob
         try:
-            operations_list = json.loads(operations)
+            operations_obj = json.loads(operations)
+            if "operations" in operations_obj:
+                operations_list = operations_obj["operations"]
             if type(operations_list) is not list:
                 raise ValueError(
-                    f"Operations should be a json blob with a list, but got: {type(operations_list)}"
+                    f"Operations should be a json blob with a list, but got: {operations_list}"
                 )
             if not isinstance(operations_list, list):
                 raise ValueError("Operations should be a list.")

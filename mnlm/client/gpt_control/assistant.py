@@ -163,11 +163,15 @@ def start_conversation(
     nudge_user: bool,
     use_voice_input: bool,
     use_voice_output: bool,
+    use_dummy_robot_arm_server: bool,
     logger: Logger,
 ) -> None:
-    load_dotenv()
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
-    tools = init_tools(logger=logger, verbose=verbose)
+    client = OpenAI()
+    tools = init_tools(
+        logger=logger,
+        verbose=verbose,
+        use_dummy_robot_arm_server=use_dummy_robot_arm_server,
+    )
     assistant = create_assistant(
         client=client, tools=tools, logger=logger, verbose=verbose
     )
@@ -223,15 +227,18 @@ def start_conversation(
 
 
 if __name__ == "__main__":
+    load_dotenv(override=True)
     verbose = True
     nudge_user = True
-    use_voice_input = True  # Set to True to enable voice input
-    use_voice_output = True  # Set to True to enable voice output
+    use_voice_input = True  # Set to True to enable voice input. In docker container, it's not possible.
+    use_voice_output = True  # Set to True to enable voice output. In docker container, it's not possible.
+    use_dummy_robot_arm_server = True  # Set to True to use the simulation mode
     logger = Logger(__name__)
     start_conversation(
         verbose=verbose,
         nudge_user=nudge_user,
         use_voice_input=use_voice_input,
         use_voice_output=use_voice_output,
+        use_dummy_robot_arm_server=use_dummy_robot_arm_server,
         logger=logger,
     )
