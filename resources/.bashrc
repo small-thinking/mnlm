@@ -1,6 +1,7 @@
 source /opt/ros/${ROS_DISTRO}/setup.bash
-export v="vim"
-export gb="git branch"
-export gc="git checkout"
-export gD="git branch -D"
-export gp="git pull"
+alias v="vim"
+alias gb="git branch"
+alias gc="git checkout"
+alias gD="git branch -D"
+alias gp="git pull"
+alias python="python3"

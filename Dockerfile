@@ -11,7 +11,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     python3.11 python3.11-dev python3.11-venv \
     python3.11-distutils python3.11-gdbm \
-    python3.11-tk python3.11-lib2to3
+    python3.11-tk python3.11-lib2to3 portaudio19-dev
 
 
 # Add ROS2 GPG key
@@ -54,7 +54,8 @@ RUN chmod -R 755 ./resources && ./resources/setup_env.sh \
         ros-humble-ros2-control ros-humble-ros2-controllers ros-humble-ign-ros2-control \
         ros-humble-ros-gz-sim ros-humble-ros-gz-bridge ros-humble-ros-gz-interfaces ros-humble-moveit \
     # Install python packages
-    && pip install flask
+    && pip install flask opencv-python tavily-python==0.3.0 python-dotenv==1.0.0 colorama==0.4.6 pyaudio==0.2.14 \
+    openai==1.6.1 pygame==2.5.2
 
 # # Setup colcon mixin and metadata
 # RUN colcon mixin add default \
