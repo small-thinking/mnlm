@@ -15,12 +15,11 @@ def generate_launch_description():
         executable="command_receiver_node",
         name="command_receiver_node",
     )
-    # # WIP. The node to dispatch the received command to topics.
-    # command_dispatcher_node = Node(
-    #     package="robot_arm",
-    #     executable="command_dispatcher_node",
-    #     name="command_dispatcher_node",
-    # )
+    command_dispatcher_node = Node(
+        package="robot_arm",
+        executable="command_dispatcher_node",
+        name="command_dispatcher_node",
+    )
 
     # Include the project folder
     pkg_robot_arm_gazebo = get_package_share_directory("robot_arm")
@@ -110,5 +109,6 @@ def generate_launch_description():
             joint_state_broadcaster_node,
             robot_controller_spawner_node,
             command_receiver_node,
+            command_dispatcher_node,
         ]
     )

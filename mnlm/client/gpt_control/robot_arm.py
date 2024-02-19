@@ -213,6 +213,14 @@ class RobotArmControlClient(RobotArmControl):
         self.endpoint_url = endpoint_url
 
     def _execute_operations(self, operations: List[Dict[str, Any]]) -> None:
+        """For now we only move one servo at a time.
+
+        Args:
+            operations (List[Dict[str, Any]]): _description_
+
+        Raises:
+            Exception: _description_
+        """
         response = requests.post(self.endpoint_url, json={"operations": operations})
         if response.status_code != 200:
             raise Exception(f"Failed to execute operations: {response.text}")
