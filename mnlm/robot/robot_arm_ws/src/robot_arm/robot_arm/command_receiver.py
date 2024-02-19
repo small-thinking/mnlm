@@ -20,7 +20,7 @@ class FlaskNode(Node):
 def create_app(ros_node):
     app = Flask(__name__)
 
-    @app.route("/command", methods=["POST"])
+    @app.route("/robot_command", methods=["POST"])
     def json_example():
         if request.is_json:
             content = request.get_json()
@@ -42,7 +42,7 @@ def main(args=None):
 
     # Running Flask in a separate thread
     threading.Thread(
-        target=lambda: app.run(host="0.0.0.0", port=5000), daemon=True
+        target=lambda: app.run(host="0.0.0.0", port=5678), daemon=True
     ).start()
 
     rclpy.spin(ros_node)
