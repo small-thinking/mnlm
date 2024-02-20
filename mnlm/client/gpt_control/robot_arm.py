@@ -96,7 +96,7 @@ class OperationSequenceGenerator:
                 ]
             }}
             
-            The list of operations can be 1 ore many.
+            Note: The list of operations can be 1 ore many. And the servos are with ids from servo0 to servo5.
 
             Command:        
             ---
