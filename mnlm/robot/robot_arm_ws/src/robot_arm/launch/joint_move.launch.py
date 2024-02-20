@@ -7,7 +7,7 @@ def generate_launch_description():
         [
             launch_ros.actions.Node(
                 package="robot_arm",
-                executable="joint_move_node",
+                executable="joint_move_script_node",
                 output="screen",
             ),
         ]

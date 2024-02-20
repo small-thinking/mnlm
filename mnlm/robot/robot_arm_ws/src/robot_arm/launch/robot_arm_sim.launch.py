@@ -20,6 +20,11 @@ def generate_launch_description():
         executable="command_dispatcher_node",
         name="command_dispatcher_node",
     )
+    joint_mover_node = Node(
+        package="robot_arm",
+        executable="joint_mover_node",
+        name="joint_mover_node",
+    )
 
     # Include the project folder
     pkg_robot_arm_gazebo = get_package_share_directory("robot_arm")
@@ -110,5 +115,6 @@ def generate_launch_description():
             robot_controller_spawner_node,
             command_receiver_node,
             command_dispatcher_node,
+            joint_mover_node,
         ]
     )
