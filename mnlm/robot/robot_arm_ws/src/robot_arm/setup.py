@@ -39,9 +39,9 @@ setup(
     tests_require=["pytest"],
     entry_points={
         "console_scripts": [
-            "command_receiver_node = robot_arm.command_receiver:main",
-            "command_dispatcher_node = robot_arm.command_dispatcher:main",
-            "joint_mover_node = robot_arm.joint_mover:main",
+            "command_receiver_node = robot_arm.command_receiver_node:main",
+            "command_dispatcher_node = robot_arm.command_dispatcher_node:main",
+            "joint_mover_node = robot_arm.joint_mover_node:main",
             "joint_move_script_node = robot_arm.joint_move_script:main",
         ],
     },

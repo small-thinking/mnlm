@@ -82,7 +82,7 @@ class JointMoverNode(Node):
             target_servo_index = int(joint_id[-1])
             target_position = angle_in_degrees * (3.14159 / 180.0)  # Convert degrees to radians
             positions[target_servo_index] = target_position
-            # Only set the velocity of the target joint as 0.5
+            # Only set the velocity of the target joint as 0.8
             velocities[target_servo_index] = 0.5
         elif "angles" in command_data:
             angles = command_data["angles"]
@@ -93,7 +93,7 @@ class JointMoverNode(Node):
         # Send the command to the action server
         response = self.send_goal_and_wait(positions=positions, velocities=velocities, time_from_start_sec=3)
         if response:
-            self.get_logger().info(f"Successfully moved joint {joint_id} to {angle_in_degrees} degrees.")
+            self.get_logger().info(f"Successfully moved joint(s) to {positions} degrees.")
         
 
     def send_goal_and_wait(self, positions: List[float], velocities: List[float], time_from_start_sec: int) -> bool:
@@ -127,9 +127,9 @@ class JointMoverNode(Node):
     def _feedback_callback(self, feedback_msg):
         actual_positions = feedback_msg.feedback.actual.positions
         actual_velocities = feedback_msg.feedback.actual.velocities
-        self.get_logger().info(
-            f"Received feedback: positions: {actual_positions}, velocities: {actual_velocities}"
-        )
+        # self.get_logger().info(
+        #     f"Received feedback: positions: {actual_positions}, velocities: {actual_velocities}"
+        # )
 
 
 def main(args=None):
