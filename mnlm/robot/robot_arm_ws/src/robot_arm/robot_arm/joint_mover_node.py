@@ -66,31 +66,34 @@ class JointMoverNode(Node):
         
     def _joint_command_callback(self, msg: String):
         self.get_logger().error(f"Received joint command: {msg.data}")
-        command_data = json.loads(msg.data)
         
-        joint_id = command_data["id"]
-        angle_in_degrees = command_data["angle"]
-        time_in_seconds = command_data["time"] / 1000.0  # Convert milliseconds to seconds
-
         # Read the current position from /joint_states topic
         positions = self._get_current_joint_positions(self.joint_names)
         self.get_logger().info(f"Current joint positions: {positions}")
         velocities = [0.0] * (self.num_joints + self.num_gripper_fingers)
         
-        # Update the angle for the specified joint, note the command is in degree and the position is in radians
-        if "servo" in joint_id:
+        # Parse the incoming command and take the appropriate action.
+        command_data = json.loads(msg.data)
+        if "id" in command_data:
+            joint_id = command_data["id"]
+            angle_in_degrees = command_data["angle"]
+            time_in_seconds = command_data["time"] / 1000.0  # Convert milliseconds to seconds
+            
             target_servo_index = int(joint_id[-1])
             target_position = angle_in_degrees * (3.14159 / 180.0)  # Convert degrees to radians
             positions[target_servo_index] = target_position
-        
             # Only set the velocity of the target joint as 0.5
             velocities[target_servo_index] = 0.5
-            # Send the command to the action server
-            response = self.send_goal_and_wait(positions=positions, velocities=velocities, time_from_start_sec=3)
-            if response:
-                self.get_logger().info(f"Successfully moved joint {joint_id} to {angle_in_degrees} degrees.")
-        else:
-            self.get_logger().error(f"Invalid joint ID: {joint_id}")
+        elif "angles" in command_data:
+            angles = command_data["angles"]
+            positions = [angle * (3.14159 / 180.0) for angle in angles]
+            # Set the velocity of all joints as 0.5
+            velocities = [0.5] * (self.num_joints + self.num_gripper_fingers)
+        
+        # Send the command to the action server
+        response = self.send_goal_and_wait(positions=positions, velocities=velocities, time_from_start_sec=3)
+        if response:
+            self.get_logger().info(f"Successfully moved joint {joint_id} to {angle_in_degrees} degrees.")
         
 
     def send_goal_and_wait(self, positions: List[float], velocities: List[float], time_from_start_sec: int) -> bool:

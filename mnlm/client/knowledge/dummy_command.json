@@ -1,0 +1,20 @@
+{
+    "operations": [
+        {
+            "operation": "move_single_servo",
+            "parameters": {"id": "servo1", "angle": 30, "time": 500}
+        },
+        {
+            "operation": "move_single_servo",
+            "parameters": {"id": "servo1", "angle": 120, "time": 500}
+        },
+        {
+            "operation": "move_single_servo",
+            "parameters": {"id": "servo1", "angle": 30, "time": 500}
+        },
+        {
+            "operation": "move_single_servo",
+            "parameters": {"id": "servo1", "angle": 120, "time": 500}
+        }
+    ]
+}

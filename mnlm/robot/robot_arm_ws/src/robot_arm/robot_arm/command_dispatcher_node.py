@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String, Float64
-from typing import Any, List
+from typing import Any, List, Dict
 import json
 
 
@@ -64,6 +64,13 @@ class CommandDispatcherNode(Node):
                 self.get_logger().warn(f"Setting RGB light to {parameters}")
             else:
                 self.get_logger().error(f"Unknown action: {operation}")
+            # Wait for 3 second to send the next operation
+            self.get_logger().info("Waiting for 3 seconds before sending the next operation.")
+            rclpy.sleep(3)  # This waits for 3 seconds
+            
+            
+
+            
 
     def _move_single_joint(self, servo_id: str, angle: float, time: int):
         # Joints can only be servo0-servo5 and left_gripper_joint, right_gripper_joint
@@ -75,6 +82,18 @@ class CommandDispatcherNode(Node):
             self.get_logger().info(f"{msg.data} published to /joint_commands")
         else:
             self.get_logger().error(f"{self.node_name} Unknown joint: {servo_id}")
+            
+    def _move_all_joints(self, servo_degrees: List[float], time: int):
+        # Joints can only be servo0-servo5 and left_gripper_joint, right_gripper_joint
+        if len(servo_degrees) == 6:
+            command = json.dumps({"angles": servo_degrees, "time": time})
+            msg = String()
+            msg.data = command
+            self.joint_command_pub.publish(msg)
+            self.get_logger().info(f"{msg.data} published to /joint_commands")
+        else:
+            self.get_logger().error(
+                f"{self.node_name} Incorrect number of servo degrees: {len(servo_degrees)}. Expected 6.")
 
 
 def main(args=None):
