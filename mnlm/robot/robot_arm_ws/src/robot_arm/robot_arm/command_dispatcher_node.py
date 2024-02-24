@@ -1,8 +1,9 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String, Float64
-from typing import Any, List
+from typing import Any, List, Dict
 import json
+import time
 
 
 class CommandDispatcherNode(Node):
@@ -62,9 +63,18 @@ class CommandDispatcherNode(Node):
                 )
             elif func_name == "set_rgb_light":  # set the RGB light
                 self.get_logger().warn(f"Setting RGB light to {parameters}")
+            elif func_name == "move_all_servos":
+                self._move_all_joints(
+                    servo_degrees=parameters.get("angles", [0, 0, 0, 0, 0, 0]),
+                    time=parameters.get("time", 0)
+                )
             else:
                 self.get_logger().error(f"Unknown action: {operation}")
-
+            seconds = 5
+            self._log_with_color("Waiting for {seconds} seconds before sending the next operation.")
+            time.sleep(seconds)
+            
+            
     def _move_single_joint(self, servo_id: str, angle: float, time: int):
         # Joints can only be servo0-servo5 and left_gripper_joint, right_gripper_joint
         if servo_id in ["servo0", "servo1", "servo2", "servo3", "servo4", "left_gripper_joint", "right_gripper_joint"]:
@@ -75,7 +85,34 @@ class CommandDispatcherNode(Node):
             self.get_logger().info(f"{msg.data} published to /joint_commands")
         else:
             self.get_logger().error(f"{self.node_name} Unknown joint: {servo_id}")
+            
+    def _move_all_joints(self, servo_degrees: List[float], time: int):
+        # Joints can only be servo0-servo5 and left_gripper_joint, right_gripper_joint
+        if len(servo_degrees) == 7:
+            command = json.dumps({"angles": servo_degrees, "time": time})
+            msg = String()
+            msg.data = command
+            self.joint_command_pub.publish(msg)
+            self.get_logger().info(f"{msg.data} published to /joint_commands")
+        else:
+            self.get_logger().error(
+                f"{self.node_name} Incorrect number of servo degrees: {len(servo_degrees)}. Expected 7.")
 
+
+    def _log_with_color(self, msg: str, color="red"):
+        """Prints a log message with color."""
+        colors = {
+            "red": "\033[91m",
+            "green": "\033[92m",
+            "yellow": "\033[93m",
+            "blue": "\033[94m",
+            "magenta": "\033[95m",
+            "cyan": "\033[96m",
+            "white": "\033[97m",
+            "reset": "\033[0m"
+        }
+        color_code = colors.get(color, colors["reset"])
+        self.get_logger().error(f"{color_code}{msg}{colors['reset']}")
 
 def main(args=None):
     rclpy.init(args=args)

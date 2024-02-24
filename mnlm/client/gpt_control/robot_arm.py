@@ -92,6 +92,10 @@ class OperationSequenceGenerator:
                     {{
                         "operation": "move_single_servo",
                         "parameters": {{"id": "servo1", "angle": 90, "time": 500}}
+                    }},
+                    {{
+                        "operation": "move_all_servos",
+                        "parameters": {{"angles": [0, 90, 90, 45, 32, 0], "time": 500}}
                     }}
                 ]
             }}
@@ -111,7 +115,7 @@ class OperationSequenceGenerator:
         if self.verbose:
             self.logger.info(f"Instruction: {instruction}")
         response = self.gpt_client.chat.completions.create(
-            model="gpt-3.5-turbo-1106",
+            model="gpt-3.5-turbo-0125",
             messages=[
                 {
                     "role": "system",

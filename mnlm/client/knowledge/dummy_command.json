@@ -1,0 +1,16 @@
+{
+    "operations": [
+        {
+            "operation": "move_all_servos",
+            "parameters": {"angles": [0, 45, 60, 60, 0, 0, 0], "time": 500}
+        },
+        {
+            "operation": "move_single_servo",
+            "parameters": {"id": "servo0", "angle": -60, "time": 500}
+        },
+        {
+            "operation": "move_single_servo",
+            "parameters": {"id": "servo0", "angle": 60, "time": 500}
+        }
+    ]
+}
