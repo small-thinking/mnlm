@@ -93,3 +93,11 @@ Use G|B|V|C|D|E|R|T keys to rotate to absolute orientations. 'F' to cancel a rot
 ```bash
 docker rm $(docker ps -a -q) ; docker images | grep '<none>' | awk '{print $3}' | xargs docker rmi
 ```
+
+
+
+
+TODOs:
+5. Build a key value store to store the verbal command and the list of commands.
+6. Index the key value store with the verbal command in to vector db.
+7. Add RAG after voice recognition.

@@ -1,0 +1,192 @@
+[
+  {
+    "instruction": "reset",
+    "operations": [
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      }
+    ]
+  },
+  {
+    "instruction": "A simple dance",
+    "operations": [
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            45,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo0",
+          "angle": -60,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo0",
+          "angle": 60,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      }
+    ]
+  },
+  {
+    "instruction": "A complex dance",
+    "operations": [
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            45,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo0",
+          "angle": -60,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo0",
+          "angle": 60,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo0",
+          "angle": -60,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo0",
+          "angle": 60,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      }
+    ]
+  },
+  {
+    "instruction": "node the head",
+    "operations": [
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo3",
+          "angle": 50,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo3",
+          "angle": 10,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo3",
+          "angle": 50,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_single_servo",
+        "parameters": {
+          "id": "servo3",
+          "angle": 0,
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      }
+    ]
+  }
+]

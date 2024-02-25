@@ -16,6 +16,7 @@ colorama = "^0.4.6"
 types-pyaudio = "^0.2.16.7"
 types-requests = "^2.31.0.10"
 types-colorama = "^0.4.15.12"
+faiss-cpu = "^1.7.4"
 
 
 [tool.poetry.group.dev.dependencies]
