@@ -3,6 +3,7 @@ import os
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
+from command_indexer import InstructionIndexer  # type: ignore
 from openai import OpenAI
 from robot_arm import (
     OperationSequenceGenerator,
@@ -80,6 +81,7 @@ class RobotArmController(Tool):
         logger: Logger,
         gpt_client: Optional[OpenAI] = None,
         simulation: bool = True,
+        use_rag: bool = False,
         verbose: bool = False,
     ):
         super().__init__(name=name, logger=logger, verbose=verbose)
@@ -87,11 +89,17 @@ class RobotArmController(Tool):
         api_document_path = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "knowledge", "robot_arm.md"
         )
-        self.operation_generator = OperationSequenceGenerator(
-            api_document_path=api_document_path,
-            gpt_client=gpt_client,
-            logger=logger,
-        )
+        self.use_rag = use_rag
+        if self.use_rag:
+            self.indexer = InstructionIndexer()
+            self.indexer.load_index_and_data()
+        else:
+            self.operation_generator = OperationSequenceGenerator(
+                api_document_path=api_document_path,
+                gpt_client=gpt_client,
+                logger=logger,
+            )
+
         self.simulation = simulation
         self.knowledge = f"""
 
@@ -125,9 +133,14 @@ class RobotArmController(Tool):
     def execute(self, instruction: str) -> str:
         try:
             # Execute operations using the chosen mode (simulation or real)
-            operations_json = self.operation_generator.translate_prompt_to_sequence(
-                prompt=instruction
-            )
+            if self.use_rag:
+                operations_json = self.indexer.retrieve_operation_sequences(
+                    instruction=instruction
+                )
+            else:
+                operations_json = self.operation_generator.translate_prompt_to_sequence(
+                    prompt=instruction
+                )
             if self.verbose:
                 self.logger.info(f"Robot arm command: {operations_json}.")
             self.robot_arm_control.execute_operations(operations_json)
@@ -138,7 +151,10 @@ class RobotArmController(Tool):
 
 
 def init_tools(
-    logger: Logger, verbose: bool = False, use_dummy_robot_arm_server: bool = False
+    logger: Logger,
+    verbose: bool = False,
+    use_dummy_robot_arm_server: bool = False,
+    use_rag: bool = False,
 ) -> Dict[str, Any]:
     """Initialize the tools for the assistant.
 
@@ -155,6 +171,7 @@ def init_tools(
             name="robot_arm",
             logger=logger,
             verbose=verbose,
+            use_rag=use_rag,
             simulation=use_dummy_robot_arm_server,
         ),
     }
