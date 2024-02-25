@@ -71,7 +71,7 @@ class CommandDispatcherNode(Node):
             else:
                 self.get_logger().error(f"Unknown action: {operation}")
             seconds = 5
-            self._log_with_color("Waiting for {seconds} seconds before sending the next operation.")
+            self._log_with_color("Waiting for {seconds} seconds before sending the next operation.", "yellow")
             time.sleep(seconds)
             
             

@@ -63,15 +63,47 @@
             },
             {
                 "operation": "move_single_servo",
-                "parameters": {"id": "servo3", "angle": 10, "time": 500}
-            },
-            {
-                "operation": "move_single_servo",
-                "parameters": {"id": "servo3", "angle": 50, "time": 500}
-            },
-            {
-                "operation": "move_single_servo",
                 "parameters": {"id": "servo3", "angle": 0, "time": 500}
+            },
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [0, 0, 0, 0, 0, 0, 0], "time": 500}
+            }
+        ]
+    },
+    "shake the body": {
+        "operations": [
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [45, 60, 60, 30, 0, 0, 0], "time": 500}
+            },
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [0, 30, 30, 0, 0, 0, 0], "time": 500}
+            },
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [135, 60, 60, 30, 0, 0, 0], "time": 500}
+            },
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [0, 0, 0, 0, 0, 0, 0], "time": 500}
+            }
+        ]
+    },
+    "seize the gripper, size the fingers": {
+        "operations": [
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [0, 0, 0, 0, 0, 10, 10], "time": 500}
+            },
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [0, 0, 0, 0, 0, 0, 0], "time": 500}
+            },
+            {
+                "operation": "move_all_servos",
+                "parameters": {"angles": [0, 0, 0, 0, 0, 10, 10], "time": 500}
             },
             {
                 "operation": "move_all_servos",
