@@ -4,7 +4,7 @@
 [![图片替代文本](./images/screen.png)](https://www.bilibili.com/video/BV1ub4y1T7Jt/?vd_source=08295b5b4b3c5ece73fb91e3a54d202a)
 
 ## 构建并启动Docker容器
-
+0. 将 .env.template 更名为 .env 并添加 OPEN_API_KEY。
 1. 安装 [Docker](https://docs.docker.com/get-docker/) 和 [Docker Compose](https://docs.docker.com/compose/install/)。
 ```bash
 docker-compose up --build -d
