@@ -77,7 +77,7 @@ class OperationSequenceGenerator:
         instruction = f"""
             Please convert the following oral comamnd to machine readable operation json (list of json blobs)
             according to the API document.
-
+            
             An example output would be:
             {{
                 operations: [
