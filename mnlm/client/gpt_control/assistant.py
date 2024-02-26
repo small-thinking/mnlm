@@ -31,7 +31,9 @@ def create_assistant(
     tool_signatures = [tool.get_signature() for tool in tools.values()]
     assistant = client.beta.assistants.create(
         name="Voice Robot Controller",
-        instructions="You have a brain and a robot arm, and you receive voice command from the human being, and respond accordingly.",
+        instructions="""
+            You have a brain and a robot arm, and you receive voice command from the human being, and respond accordingly.
+        """,
         tools=tool_signatures,
         model="gpt-3.5-turbo-1106",
     )

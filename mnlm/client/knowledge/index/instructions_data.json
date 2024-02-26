@@ -1,6 +1,6 @@
 [
   {
-    "instruction": "reset",
+    "instruction": "reset or stand still",
     "operations": [
       {
         "operation": "move_all_servos",
@@ -10,6 +10,26 @@
             0,
             0,
             0,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      }
+    ]
+  },
+  {
+    "instruction": "bow or bend",
+    "operations": [
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            60,
+            60,
+            85,
             0,
             0,
             0
@@ -71,14 +91,14 @@
     ]
   },
   {
-    "instruction": "A complex dance",
+    "instruction": "A complex dance looks like subject 3 (\u79d1\u76ee3)",
     "operations": [
       {
         "operation": "move_all_servos",
         "parameters": {
           "angles": [
-            0,
-            45,
+            -60,
+            60,
             60,
             60,
             0,
@@ -89,34 +109,167 @@
         }
       },
       {
-        "operation": "move_single_servo",
+        "operation": "move_all_servos",
         "parameters": {
-          "id": "servo0",
-          "angle": -60,
+          "angles": [
+            0,
+            60,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
           "time": 500
         }
       },
       {
-        "operation": "move_single_servo",
+        "operation": "move_all_servos",
         "parameters": {
-          "id": "servo0",
-          "angle": 60,
+          "angles": [
+            60,
+            60,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
           "time": 500
         }
       },
       {
-        "operation": "move_single_servo",
+        "operation": "move_all_servos",
         "parameters": {
-          "id": "servo0",
-          "angle": -60,
+          "angles": [
+            0,
+            60,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
           "time": 500
         }
       },
       {
-        "operation": "move_single_servo",
+        "operation": "move_all_servos",
         "parameters": {
-          "id": "servo0",
-          "angle": 60,
+          "angles": [
+            -60,
+            60,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            60,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            60,
+            60,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            0,
+            60,
+            60,
+            60,
+            0,
+            0,
+            0
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            -60,
+            60,
+            30,
+            0,
+            0,
+            -10,
+            -10
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            60,
+            60,
+            30,
+            0,
+            0,
+            10,
+            10
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            -60,
+            60,
+            30,
+            0,
+            0,
+            -10,
+            -10
+          ],
+          "time": 500
+        }
+      },
+      {
+        "operation": "move_all_servos",
+        "parameters": {
+          "angles": [
+            60,
+            60,
+            30,
+            0,
+            0,
+            10,
+            10
+          ],
           "time": 500
         }
       },
