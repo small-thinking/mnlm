@@ -28,7 +28,7 @@ cd /home/small-thinking/mnlm/mnlm/robot/robot_arm_ws
 ```
 
 ```
-colcon build --symlink-install ; source install/setup.bash ; ros2 launch robot_arm robot_arm.launch.py
+colcon build --symlink-install ; source install/setup.bash ; ros2 launch robot_arm robot_arm_sim.launch.py
 ```
 
 You should see the server side program started. And you can visit `http://localhost:8080/vnc.html`` to see the Gazebo Fortress simulation environment.
