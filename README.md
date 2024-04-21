@@ -1,6 +1,6 @@
 # mnlm ([中文文档](README.cn.md))
 
-Source code of robotic arm demo (see https://www.bilibili.com/video/BV1ub4y1T7Jt/).
+Source code of robotic arm demo (see [Physical Robot Arm](https://www.youtube.com/watch?v=1Cc4AkWwk6c) and [Simulation](https://www.youtube.com/watch?v=WkzuFo5H0f4)).
 
 
 [![IMAGE ALT TEXT HERE](./images/screen.png)](https://www.bilibili.com/video/BV1ub4y1T7Jt/?vd_source=08295b5b4b3c5ece73fb91e3a54d202a)
